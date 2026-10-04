@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}沟通与交付{% endblock %}
+{% block content %}
+<h1>沟通与交付</h1>
+<p>模型只生成草稿；点击人工批准后状态才会改变，本演示不会真实发送邮件。</p>
+
+<section>
+  <h2>已选创作者</h2>
+  {% for creator in creators %}
+    <article>
+      <h3>{{ creator.name }} · {{ creator.handle }}</h3>
+      <p>{{ creator.platform }} · {{ creator.category }} · 规则分 {{ creator.rule_score }} · AI 分 {{ creator.llm_score if creator.llm_score is not none else "未运行" }}</p>
+      <form method="post" action="/campaigns/{{ campaign.id }}/drafts/{{ creator.id }}">
+        <button type="submit">生成英文外联草稿</button>
+      </form>
+    </article>
+  {% else %}
+    <p>尚未选择创作者，请先到智能匹配页面选择。</p>
+  {% endfor %}
+</section>
+
+<section>
+  <h2>外联草稿</h2>
+  {% for draft in drafts %}
+    <article>
+      <h3>{{ draft.name }} · {{ {"pending": "待人工确认", "approved": "已确认（未发送）", "stale": "已失效：请重新筛选并生成"}.get(draft.status, draft.status) }}</h3>
+      {% if draft.status == "stale" %}<p>项目或创作者资料已变化。这份草稿仅保留为历史，不可再批准。</p>{% endif %}
+      <p><strong>Subject:</strong> {{ draft.subject }}</p>
+      <pre>{{ draft.body }}</pre>
+      <details><summary>查看 Brief</summary><pre>{{ draft.brief }}</pre></details>
+      {% if draft.status == "pending" %}
+        <form method="post" action="/drafts/{{ draft.id }}/approve">
+          <button type="submit">人工批准</button>
+        </form>
+      {% endif %}
+    </article>
+  {% else %}
+    <p>尚未生成草稿。</p>
+  {% endfor %}
+</section>
+
+<section>
+  <h2>交付内容审核</h2>
+  <p>仅检查提交文字与填写信息，不读取视频，也不访问链接；结果需要人工核实。</p>
+  <form method="post" action="/campaigns/{{ campaign.id }}/reviews">
+    <label>创作者提交内容
+      <textarea name="content" rows="8" maxlength="20000" required placeholder="Paste the English caption or script here"></textarea>
+    </label>
+    <label>交付链接
+      <input type="url" name="link" placeholder="https://">
+    </label>
+    <label>计划发布时间
+      <input type="datetime-local" name="planned_publish_at">
+    </label>
+    <button type="submit">运行内容审核</button>
+  </form>
+</section>
+
+<section>
+  <h2>审核结果</h2>
+  {% for review in reviews %}
+    <article id="review-{{ review.id }}">
+      <h3>审核 #{{ review.id }}</h3>
+      <pre>{{ review.submission_content }}</pre>
+      <h4>模型认为满足的文本检查（不等于最终验收）</h4><ul>{% for item in review.result.passed_checks %}<li>{{ item }}</li>{% else %}<li>无</li>{% endfor %}</ul>
+      <h4>缺少要求</h4><ul>{% for item in review.result.missing_requirements %}<li>{{ item }}</li>{% else %}<li>无</li>{% endfor %}</ul>
+      <h4>问题标签</h4><ul>{% for item in review.result.issue_labels %}<li>{{ item }}</li>{% else %}<li>无</li>{% endfor %}</ul>
+      <h4>待人工核实的风险提示</h4><ul>{% for item in review.result.risks %}<li>{{ item }}</li>{% else %}<li>无</li>{% endfor %}</ul>
+      <h4>修改建议</h4><ul>{% for item in review.result.suggestions %}<li>{{ item }}</li>{% else %}<li>无</li>{% endfor %}</ul>
+      <h4>依据</h4><ul>{% for item in review.result.sources %}<li>{{ item }}</li>{% else %}<li>未检索到知识文档</li>{% endfor %}</ul>
+    </article>
+  {% else %}
+    <p>尚无审核记录。</p>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,166 @@
+{
+  "match_cases": [
+    {
+      "name": "ideal US fitness TikTok",
+      "campaign": {},
+      "candidates": [
+        {"handle": "@fitness_alternative", "platform": "TikTok", "country": "US", "category": "fitness", "followers": 40000, "engagement_rate": 1.0, "estimated_fee": 1200},
+        {"handle": "@fit_us", "platform": "TikTok", "country": "US", "category": "fitness", "followers": 120000, "engagement_rate": 5.2, "estimated_fee": 800}
+      ],
+      "expected_handles": ["@fit_us"]
+    },
+    {
+      "name": "ideal US tech YouTube",
+      "campaign": {},
+      "candidates": [
+        {"handle": "@tech_alternative", "platform": "YouTube", "country": "US", "category": "tech", "followers": 40000, "engagement_rate": 1.0, "estimated_fee": 1200},
+        {"handle": "@tech_us", "platform": "YouTube", "country": "US", "category": "tech", "followers": 210000, "engagement_rate": 4.4, "estimated_fee": 1100}
+      ],
+      "expected_handles": ["@tech_us"]
+    },
+    {
+      "name": "budget exclusion",
+      "campaign": {},
+      "candidates": [
+        {"handle": "@pricey", "estimated_fee": 2400},
+        {"handle": "@on_budget", "estimated_fee": 700}
+      ],
+      "expected_handles": ["@on_budget"]
+    },
+    {
+      "name": "follower ceiling",
+      "campaign": {},
+      "candidates": [
+        {"handle": "@million", "followers": 1000000},
+        {"handle": "@mid_size", "followers": 180000}
+      ],
+      "expected_handles": ["@mid_size"]
+    },
+    {
+      "name": "wrong market",
+      "campaign": {},
+      "candidates": [
+        {"handle": "@canada", "country": "CA"},
+        {"handle": "@america", "country": "US"}
+      ],
+      "expected_handles": ["@america"]
+    },
+    {
+      "name": "wrong platform",
+      "campaign": {},
+      "candidates": [
+        {"handle": "@instagram", "platform": "Instagram"},
+        {"handle": "@tiktok", "platform": "TikTok"}
+      ],
+      "expected_handles": ["@tiktok"]
+    },
+    {
+      "name": "category mismatch",
+      "campaign": {},
+      "candidates": [
+        {"handle": "@beauty", "category": "beauty"},
+        {"handle": "@fitness", "category": "fitness"}
+      ],
+      "expected_handles": ["@fitness"]
+    },
+    {
+      "name": "high engagement alternative",
+      "campaign": {},
+      "candidates": [
+        {"handle": "@low_engagement", "engagement_rate": 1.1},
+        {"handle": "@high_engagement", "engagement_rate": 7.2}
+      ],
+      "expected_handles": ["@high_engagement"]
+    },
+    {
+      "name": "stale data exclusion",
+      "campaign": {},
+      "candidates": [
+        {"handle": "@stale", "data_quality_status": "stale"},
+        {"handle": "@fresh", "data_quality_status": "valid"}
+      ],
+      "expected_handles": ["@fresh"]
+    },
+    {
+      "name": "mixed fitness-tech campaign",
+      "campaign": {"categories": ["fitness", "tech"]},
+      "candidates": [
+        {"handle": "@lifestyle", "category": "lifestyle", "engagement_rate": 2.0},
+        {"handle": "@fittech", "category": "tech", "engagement_rate": 5.8}
+      ],
+      "expected_handles": ["@fittech"]
+    }
+  ],
+  "review_cases": [
+    {
+      "name": "missing disclosure",
+      "content": "LumaSip appears in the first 5 seconds. 14-day battery.",
+      "link": "https://example.test/1",
+      "planned_publish_at": "2026-11-01T10:00:00Z",
+      "expected_labels": ["missing_disclosure"]
+    },
+    {
+      "name": "medical claim",
+      "content": "#ad LumaSip cures dehydration and appears in the first 5 seconds.",
+      "link": "https://example.test/2",
+      "planned_publish_at": "2026-11-01T10:00:00Z",
+      "expected_labels": ["medical_claim"]
+    },
+    {
+      "name": "missing product mention",
+      "content": "#ad The bottle appears in the first 5 seconds.",
+      "link": "https://example.test/3",
+      "planned_publish_at": "2026-11-01T10:00:00Z",
+      "expected_labels": ["missing_product"]
+    },
+    {
+      "name": "missing link",
+      "content": "#ad LumaSip appears in the first 5 seconds.",
+      "link": null,
+      "planned_publish_at": "2026-11-01T10:00:00Z",
+      "expected_labels": ["missing_link"]
+    },
+    {
+      "name": "late publish time",
+      "content": "#ad LumaSip appears in the first 5 seconds.",
+      "link": "https://example.test/5",
+      "planned_publish_at": "2026-12-01T10:00:00Z",
+      "expected_labels": ["late_publish"]
+    },
+    {
+      "name": "missing disclosure plus medical claim",
+      "content": "LumaSip treats illness and appears in the first 5 seconds.",
+      "link": "https://example.test/6",
+      "planned_publish_at": "2026-11-01T10:00:00Z",
+      "expected_labels": ["missing_disclosure", "medical_claim"]
+    },
+    {
+      "name": "valid delivery",
+      "content": "#ad LumaSip appears in the first 5 seconds. It has a 14-day battery and IPX7 water resistance.",
+      "link": "https://example.test/7",
+      "planned_publish_at": "2026-11-01T10:00:00Z",
+      "expected_labels": []
+    },
+    {
+      "name": "unsupported battery claim",
+      "content": "#ad LumaSip appears in the first 5 seconds and has a 30-day battery.",
+      "link": "https://example.test/8",
+      "planned_publish_at": "2026-11-01T10:00:00Z",
+      "expected_labels": ["unsupported_battery_claim"]
+    },
+    {
+      "name": "missing visible product requirement",
+      "content": "#ad LumaSip keeps you on track with hydration reminders.",
+      "link": "https://example.test/9",
+      "planned_publish_at": "2026-11-01T10:00:00Z",
+      "expected_labels": ["missing_visible_product"]
+    },
+    {
+      "name": "valid delivery with every required element",
+      "content": "#ad LumaSip appears in the first 5 seconds. It provides hydration reminders, a 14-day battery, and IPX7 water resistance.",
+      "link": "https://example.test/10",
+      "planned_publish_at": "2026-11-02T10:00:00Z",
+      "expected_labels": []
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>创作者调研 Agent · V2</title>
+  <link rel="stylesheet" href="/static/agent_v2.css">
+  <script src="/static/agent_v2.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#task">跳到任务输入</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="创作者调研 Agent 首页">
+      <span class="brand-mark" aria-hidden="true">CO</span>
+      <span>创作者调研 <span class="version">V2</span></span>
+    </a>
+    <span class="mode-badge {{ 'mode-mock' if provider == 'mock' else 'mode-live' }}">
+      <span class="status-dot" aria-hidden="true"></span>
+      {{ 'MOCK · 确定性模拟' if provider == 'mock' else 'DeepSeek · 真实模型' }}
+    </span>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">工具调用 · 证据引用 · 人工确认</p>
+        <h1 id="page-title">把调研交给 Agent，<br>把依据留给你。</h1>
+        <p class="intro-copy">描述目标，设定边界。Agent 选择只读工具，整理可核对的报告。</p>
+      </div>
+      <div class="intro-meta">
+        <span class="meta-count">{{ creators_count }} <small>位演示创作者</small></span>
+        <span class="model-name">{{ model }}</span>
+        <a href="#history-title">查看最近任务 <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    {% if provider == 'mock' %}
+    <p class="mode-note"><strong>当前为确定性模拟。</strong>不调用真实模型，用演示数据展示不同的工具路径；不代表真实模型推理能力。</p>
+    {% else %}
+    <p class="mode-note live-note"><strong>当前为 DeepSeek 真实模式。</strong>每次运行可能收费；手动重跑会新建任务，也可能再次收费。单次限额不是服务商账户费用上限。</p>
+    {% endif %}
+
+    <div class="workspace">
+      <aside class="task-column" aria-label="任务与历史">
+        <section class="panel task-panel" aria-labelledby="task-title">
+          <div class="section-heading">
+            <h2 id="task-title"><span class="section-number">01</span>设定任务</h2>
+            <span class="small-label">只读调研</span>
+          </div>
+          <form id="task-form">
+            <fieldset id="task-fields">
+              <legend class="sr-only">调研目标与强制条件</legend>
+              <label for="task">你想了解什么？</label>
+              <textarea id="task" name="task" rows="5" required minlength="1" maxlength="2000" placeholder="例如：找几位适合健身新品合作的创作者，说明推荐依据和需要核实的风险。" aria-describedby="task-hint"></textarea>
+              <div class="field-note"><span id="task-hint">自然语言描述目标，最多 2000 字。</span><span id="task-length">0 / 2000</span></div>
+
+              <div class="example-row" aria-label="示例任务">
+                <button type="button" class="example-button" data-example="0">候选调研</button>
+                <button type="button" class="example-button" data-example="1">报价统计</button>
+                <button type="button" class="example-button" data-example="2">知识检索</button>
+              </div>
+
+              <div class="constraints-heading"><h3>强制筛选条件</h3><span class="lock-label">代码执行边界</span></div>
+              <p class="field-hint" id="constraint-hint">以这里的条件为准。即使任务文字要求放宽，模型也不能更改市场、类别、预算或人数上限。</p>
+              <div class="fields-grid">
+                <div><label for="market">目标市场</label><select id="market" name="market" aria-describedby="constraint-hint"><option value="US">美国 · US</option><option value="UK">英国 · UK</option><option value="CA">加拿大 · CA</option></select></div>
+                <div><label for="category">创作者类别</label><select id="category" name="category" aria-describedby="constraint-hint"><option value="fitness">健身</option><option value="tech">科技</option><option value="lifestyle">生活方式</option><option value="all">全部类别</option></select></div>
+                <div><label for="max-fee">单人预算上限 · USD</label><input id="max-fee" name="max_fee" type="number" min="0" max="10000" step="0.01" value="1000" required inputmode="decimal" aria-describedby="budget-hint"></div>
+                <div><label for="count">最多候选人数</label><input id="count" name="count" type="number" min="1" max="5" step="1" value="3" required inputmode="numeric"></div>
+              </div>
+              <p id="budget-hint" class="field-hint">预算范围 0–10,000 USD；候选人数 1–5 位。</p>
+              <button id="run-button" type="submit" class="primary-button">运行调研 <span aria-hidden="true">→</span></button>
+            </fieldset>
+          </form>
+          <p class="execution-limit">每次最多 {{ limits.max_model_calls }} 次模型请求 / {{ limits.max_tool_calls }} 次工具执行 / {{ limits.deadline_seconds }} 秒。</p>
+          <p id="request-error" class="error-message" role="alert" hidden></p>
+        </section>
+
+        <section class="panel history-panel" aria-labelledby="history-title">
+          <div class="section-heading"><h2 id="history-title">最近任务</h2><button type="button" id="refresh-history" class="text-button">刷新</button></div>
+          <p class="field-hint">展示最近 20 条。打开记录可核对报告、证据和已保存的步骤。</p>
+          <p id="history-message" class="field-hint" role="status">正在读取历史记录…</p>
+          <ol id="history-list" class="history-list" aria-label="历史任务列表"></ol>
+        </section>
+      </aside>
+
+      <div class="result-column">
+        <p id="activity-message" class="activity-message" role="status" aria-live="polite" hidden></p>
+        <section id="empty-state" class="panel empty-state" aria-labelledby="empty-title">
+          <span class="empty-symbol" aria-hidden="true">↳</span>
+          <p class="eyebrow">从一个具体问题开始</p>
+          <h2 id="empty-title">你的调研工作台</h2>
+          <p>输入任务或选择示例，运行后在这里查看结果。</p>
+          <div class="tool-list"><span>候选筛选</span><span>报价统计</span><span>知识检索</span></div>
+          <p class="empty-footnote">执行轨迹会在请求返回或打开历史记录后展示。页面不提供实时流式进度。</p>
+        </section>
+
+        <div id="run-view" hidden>
+          <section class="panel run-overview" aria-labelledby="run-title">
+            <div class="section-heading"><h2 id="run-title" tabindex="-1">任务记录</h2><span id="run-status" class="status-tag"></span></div>
+            <p id="run-task" class="run-task"></p>
+            <p id="run-constraints" class="field-hint"></p>
+            <p id="run-meta" class="field-hint"></p>
+            <div id="run-usage" class="usage-grid" aria-label="本次任务用量"></div>
+            <p id="usage-warning" class="warning-message" hidden></p>
+            <p id="run-error" class="error-message" hidden></p>
+          </section>
+
+          <section id="report-panel" class="panel" aria-labelledby="report-title" hidden>
+            <div class="section-heading"><h2 id="report-title"><span class="section-number">02</span>调研报告</h2><span class="small-label">引用可核对</span></div>
+            <div id="report-content"></div>
+            <div class="approval-block"><div><p id="approval-status">报告待人工确认</p><p class="field-hint">确认只记录状态，不发送邮件，也不会自动选定创作者。</p></div><button id="approve-button" type="button" class="secondary-button">人工确认（未发送）</button></div>
+          </section>
+          <section id="no-report-panel" class="panel no-report-panel" aria-labelledby="no-report-title" hidden><h2 id="no-report-title">本次没有完整报告</h2><p id="no-report-message" class="field-hint"></p></section>
+
+          <section class="panel" aria-labelledby="trace-title">
+            <div class="section-heading"><h2 id="trace-title"><span class="section-number">03</span>执行轨迹</h2><span id="trace-count" class="small-label"></span></div>
+            <p class="field-hint">展示已保存的模型请求、工具调用和校验结果；不包含隐藏思考。展开步骤可查看参数和结果。</p>
+            <ol id="trace-list" class="trace-list"></ol>
+          </section>
+
+          <section class="panel" aria-labelledby="evidence-title">
+            <div class="section-heading"><h2 id="evidence-title"><span class="section-number">04</span>本次证据</h2><span id="evidence-count" class="small-label"></span></div>
+            <p class="field-hint">C = 创作者事实，K = 知识资料，Q = 报价统计。报告引用只应来自这次执行。</p>
+            <div id="evidence-list" class="evidence-list"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">演示数据仅供学习 · 工具只读 · 人工确认不会发送</footer>
+  <noscript><p class="noscript-message">此页面需要 JavaScript 才能提交任务和显示执行记录。请启用后重新加载。</p></noscript>
+  <script type="application/json" id="agent-config">{{ {"provider": provider, "model": model, "examples": examples, "creators_count": creators_count, "limits": limits}|tojson }}</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}智能匹配{% endblock %}
+{% block content %}
+<h1>智能匹配</h1>
+<p>先执行硬条件筛选，再让模型解释符合条件的候选人。未运行 AI 时按规则分排列，运行后优先按 AI 分排列。</p>
+
+<section aria-label="规则权重">
+  <h2>公开评分规则</h2>
+  <p>市场 20 · 平台 15 · 类别 20 · 粉丝适配 15 · 互动率 15 · 预算余量 15</p>
+  <form method="post" action="/campaigns/{{ campaign.id }}/matches/refresh">
+    <button type="submit">重新运行规则筛选</button>
+  </form>
+  <form method="post" action="/campaigns/{{ campaign.id }}/matches/ai">
+    <button type="submit">运行 AI 解释排序</button>
+  </form>
+  <p>将逐人处理 {{ matches|selectattr("eligible")|list|length }} 名合格候选；真实模型模式会产生多次 API 请求，排练建议用 mock。</p>
+</section>
+
+<section>
+  <h2>符合硬条件</h2>
+  <table>
+    <thead><tr><th>创作者</th><th>平台</th><th>类别</th><th>粉丝</th><th>报价</th><th>规则分</th><th>AI 分</th><th>建议</th><th>操作</th></tr></thead>
+    <tbody>
+    {% for match in matches if match.eligible %}
+      <tr>
+        <td>{{ match.name }}<br>{{ match.handle }}</td>
+        <td>{{ match.platform }}</td>
+        <td>{{ match.category }}</td>
+        <td>{{ match.followers }}</td>
+        <td>{{ match.currency }} {{ match.estimated_fee }}</td>
+        <td>{{ match.rule_score }}</td>
+        <td>{{ match.llm_score if match.llm_score is not none else "未运行" }}</td>
+        <td>{{ match.recommendation or "运行 AI 后显示" }}</td>
+        <td>
+          {% if match.selected %}
+            已选择
+          {% else %}
+            <form method="post" action="/campaigns/{{ campaign.id }}/matches/{{ match.creator_id }}/select">
+              <button type="submit">选择</button>
+            </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="9">尚无符合条件的创作者，请先导入数据。</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>被规则排除</h2>
+  <table>
+    <thead><tr><th>创作者</th><th>平台</th><th>市场</th><th>原因</th></tr></thead>
+    <tbody>
+    {% for match in matches if not match.eligible %}
+      <tr><td>{{ match.name }}</td><td>{{ match.platform }}</td><td>{{ match.country }}</td><td>{{ match.eligibility_reasons_json }}</td></tr>
+    {% else %}
+      <tr><td colspan="4">没有被排除的数据。</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

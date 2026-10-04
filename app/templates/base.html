@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Creator Ops Agent{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">Creator Ops Agent</a>
+    <nav aria-label="主导航">
+      <a href="/">项目总览</a>
+      <a href="/campaigns/1">项目 Brief</a>
+      <a href="/creators">创作者库</a>
+      <a href="/campaigns/1/matches">智能匹配</a>
+      <a href="/campaigns/1/workflow">沟通与交付</a>
+      <a href="/logs">日志与评测</a>
+    </nav>
+    <span class="mode" aria-label="当前模型模式">{{ llm_provider }}</span>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">Fictional demo data · Human approval required</footer>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}项目总览{% endblock %}
+{% block content %}
+<h1>项目总览</h1>
+<p>把创作者筛选、沟通与内容审核串成一条可追溯的人机协作工作流。</p>
+
+<section aria-label="业务指标">
+  <article><strong>{{ metrics.total_creators }}</strong><span>创作者</span></article>
+  <article><strong>{{ metrics.eligible_candidates }}</strong><span>符合硬条件</span></article>
+  <article><strong>{{ metrics.pending_drafts }}</strong><span>待人工批准</span></article>
+  <article><strong>{{ metrics.reviews_with_risks }}</strong><span>待核实的审核提示</span></article>
+  <article><strong>{{ metrics.recent_model_errors }}</strong><span>模型错误</span></article>
+  <article><strong>${{ "%.6f"|format(metrics.estimated_cost_usd) }}</strong><span>累计估算成本</span></article>
+</section>
+<p>审核提示包含问题标签和模型风险提示，需人工核实，不代表已确认违规。</p>
+
+<section>
+  <h2>演示路径</h2>
+  <ol>
+    <li><a href="/campaigns/{{ campaign.id }}">确认项目 Brief</a></li>
+    <li><a href="/creators">导入虚构创作者 CSV</a></li>
+    <li><a href="/campaigns/{{ campaign.id }}/matches">运行规则与 AI 排序</a></li>
+    <li><a href="/campaigns/{{ campaign.id }}/workflow">生成外联稿、人工批准并审核内容</a></li>
+    <li><a href="/logs">查看安全日志与固定评测</a></li>
+  </ol>
+</section>
+{% endblock %}

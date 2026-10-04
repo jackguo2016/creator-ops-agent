@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}日志与评测{% endblock %}
+{% block content %}
+<h1>日志与评测</h1>
+<p>只记录用途、模型、Token、耗时、成本和错误摘要；不保存 API Key、完整提示词或生成正文。</p>
+
+<section>
+  <h2>固定评测集</h2>
+  <p>10 个匹配案例 + 10 个内容审核案例。当前模式：<strong>{{ llm_provider }}</strong></p>
+  <p>Top-1 检查最高分候选是否符合预期；同分按案例中的候选顺序决定。固定案例用于回归检查，不代表真实业务准确率。</p>
+  <form method="post" action="/evaluate">
+    <button type="submit" data-confirm="DeepSeek 模式会产生少量 API 费用，确定运行吗？">运行 20 个评测案例</button>
+  </form>
+  {% if report %}
+    <dl>
+      <div><dt>Top-1 命中率</dt><dd>{{ "%.0f%%"|format(report.match_top1_hit_rate * 100) }}</dd></div>
+      <div><dt>问题标签召回率</dt><dd>{{ "%.0f%%"|format(report.issue_recall * 100) }}</dd></div>
+      <div><dt>问题标签精确率</dt><dd>{{ "%.0f%%"|format(report.issue_precision * 100) }}</dd></div>
+      <div><dt>审核标签完全一致率</dt><dd>{{ "%.0f%%"|format(report.review_exact_match_rate * 100) }}</dd></div>
+      <div><dt>最终结构化输出成功率</dt><dd>{{ "%.0f%%"|format(report.schema_success_rate * 100) }}</dd></div>
+      <div><dt>平均模型耗时</dt><dd>{{ "%.1f"|format(report.average_latency_ms) }} ms</dd></div>
+      <div><dt>本次估算成本</dt><dd>${{ "%.6f"|format(report.estimated_cost_usd) }}</dd></div>
+    </dl>
+    <p>召回率检查漏报，精确率惩罚多报；完全一致率也计入两个无问题案例。最终结构化输出成功率统计允许重试后的有效结果，不是首次响应正确率，也不代表业务判断正确。</p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>模型运行日志</h2>
+  <table>
+    <thead><tr><th>时间</th><th>用途</th><th>Provider / 模型</th><th>状态</th><th>Token</th><th>耗时</th><th>成本</th><th>错误摘要</th></tr></thead>
+    <tbody>
+    {% for run in runs %}
+      <tr>
+        <td>{{ run.created_at }}</td>
+        <td>{{ run.purpose }}</td>
+        <td>{{ run.provider }} / {{ run.model }}</td>
+        <td>{{ run.status }}</td>
+        <td>{{ run.input_tokens }} + {{ run.output_tokens }}</td>
+        <td>{{ "%.1f"|format(run.elapsed_ms) }} ms</td>
+        <td>${{ "%.6f"|format(run.estimated_cost_usd) }}</td>
+        <td>{{ run.error_summary or "—" }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="8">尚无模型运行记录。</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

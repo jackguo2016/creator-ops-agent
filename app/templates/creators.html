@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}创作者库{% endblock %}
+{% block content %}
+<h1>创作者库</h1>
+<p>导入、清洗并追踪创作者资料。示例数据全部为虚构内容。</p>
+
+<form method="post" action="/creators/import" enctype="multipart/form-data">
+  <label>创作者 CSV<input type="file" name="file" accept=".csv,text/csv" required></label>
+  <span class="file-name" data-file-for="file">未选择文件（可使用 data/creators.csv）</span>
+  <button type="submit">导入并清洗</button>
+</form>
+
+{% if summary %}
+<section aria-label="导入摘要">
+  <h2>导入摘要</h2>
+  <p>有效行 {{ summary.valid_count }} · 重复行 {{ summary.duplicate_count }} · 异常行 {{ summary.issues|length }}</p>
+  {% if summary.issues %}
+  <ul>
+    {% for issue in summary.issues %}
+    <li>第 {{ issue.row_number }} 行：{{ issue.message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+{% endif %}
+
+<form method="get" action="/creators">
+  <label>市场<input name="country" value="{{ filters.country }}" placeholder="US"></label>
+  <label>平台<input name="platform" value="{{ filters.platform }}" placeholder="TikTok"></label>
+  <label>类别<input name="category" value="{{ filters.category }}" placeholder="fitness"></label>
+  <button type="submit">筛选</button>
+</form>
+
+<table>
+  <thead><tr><th>创作者</th><th>平台</th><th>市场</th><th>类别</th><th>粉丝</th><th>互动率</th><th>报价</th><th>来源更新时间</th></tr></thead>
+  <tbody>
+  {% for creator in creators %}
+    <tr>
+      <td>{{ creator.name }}<br>{{ creator.handle }}</td>
+      <td>{{ creator.platform }}</td>
+      <td>{{ creator.country }}</td>
+      <td>{{ creator.category }}</td>
+      <td>{{ creator.followers }}</td>
+      <td>{{ creator.engagement_rate }}%</td>
+      <td>{{ creator.currency }} {{ creator.estimated_fee }}</td>
+      <td>{{ creator.source_updated_at }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="8">尚未导入创作者数据。</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

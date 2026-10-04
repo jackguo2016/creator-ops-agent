@@ -1,0 +1,31 @@
+name,platform,handle,country,category,followers,engagement_rate,estimated_fee,currency,language,email,source,source_updated_at,notes
+Maya Moves,TikTok,@mayamoves,US,fitness,85000,4.8,900,USD,English,maya@example.test,demo,2026-09-20,Strong workout hooks
+Maya Moves Updated,TikTok,mayamoves,US,fitness,91000,5.0,950,USD,English,,demo,2026-09-25,Updated quote
+Jake Trail,TikTok,@jaketrail,US,fitness,130000,4.1,1100,USD,English,jake@example.test,demo,2026-09-18,Outdoor running
+Tech Tori,YouTube,@techtori,US,tech,210000,3.7,1200,USD,English,tori@example.test,demo,2026-09-11,Long-form product reviews
+Hydrate Nina,TikTok,@hydratenina,US,lifestyle,76000,5.2,800,USD,English,nina@example.test,demo,2026-08-30,Hydration routines
+Run With Sam,YouTube,@runwithsam,US,fitness,180000,4.4,1050,USD,English,sam@example.test,demo,2026-09-02,Marathon training
+Gear By Leo,TikTok,@gearbyleo,US,tech,240000,3.9,1180,USD,English,leo@example.test,demo,2026-09-14,Wearable technology
+Wellness Amy,TikTok,@wellnessamy,US,fitness,64000,5.8,720,USD,English,amy@example.test,demo,2026-09-08,Wellness content without medical advice
+Active Alex,YouTube,@activealex,US,fitness,320000,4.0,1200,USD,English,alex@example.test,demo,2026-08-27,Fitness gear comparisons
+Pixel Pete,YouTube,@pixelpete,US,tech,145000,4.6,980,USD,English,pete@example.test,demo,2026-09-19,Consumer technology
+Eco Ella,TikTok,@ecoella,US,lifestyle,112000,4.9,860,USD,English,ella@example.test,demo,2026-09-05,Sustainable products
+Coach Chris,TikTok,@coachchris,US,fitness,480000,3.5,1200,USD,English,chris@example.test,demo,2026-09-21,Large fitness audience
+London Lifts,TikTok,@londonlifts,UK,fitness,95000,4.7,850,USD,English,london@example.test,demo,2026-09-13,Wrong market for US brief
+Maple Motion,YouTube,@maplemotion,CA,fitness,120000,4.2,800,USD,English,maple@example.test,demo,2026-09-12,Canadian audience
+Insta Ivy,Instagram,@instaivy,US,fitness,80000,5.1,750,USD,English,ivy@example.test,demo,2026-09-10,Platform not requested
+Premium Pat,TikTok,@premiumpat,US,fitness,220000,5.5,2400,USD,English,pat@example.test,demo,2026-09-16,Over budget
+Micro Mia,TikTok,@micromia,US,fitness,9000,6.1,180,USD,English,mia@example.test,demo,2026-09-17,Below follower floor
+Mega Max,YouTube,@megamax,US,tech,920000,2.9,1200,USD,English,max@example.test,demo,2026-09-17,Above follower ceiling
+Beauty Bea,TikTok,@beautybea,US,beauty,88000,5.6,820,USD,English,bea@example.test,demo,2026-09-06,Non-priority category
+Food Finn,TikTok,@foodfinn,US,food,102000,4.3,780,USD,English,finn@example.test,demo,2026-09-04,Non-priority category
+Game Gia,YouTube,@gamegia,US,gaming,195000,4.5,990,USD,English,gia@example.test,demo,2026-09-03,Non-priority category
+Circuit Cora,TikTok,@circuitcora,US,tech,67000,6.0,760,USD,English,cora@example.test,demo,2026-09-22,High engagement technology creator
+Fit Drew,TikTok,@fitdrew,US,fitness,155000,4.7,990,USD,English,drew@example.test,demo,2026-09-23,Balanced candidate
+Old Quote,YouTube,@oldquote,US,tech,40000,3.9,700,USD,English,old@example.test,demo,2025-01-01,Stale quote
+No Handle,TikTok,,US,fitness,20000,3.2,400,USD,English,nohandle@example.test,demo,2026-09-20,Missing handle
+No Fee,TikTok,@nofee,US,fitness,55000,4.2,,USD,English,nofee@example.test,demo,2026-09-20,Missing quote
+Desk Dana,YouTube,@deskdana,US,tech,53000,4.4,600,USD,English,dana@example.test,demo,2026-09-24,Productivity technology
+Tech Theo,TikTok,@techtheo,US,tech,275000,4.8,1150,USD,English,theo@example.test,demo,2026-09-26,Short technology explainers
+Lift Lina,YouTube,@liftlina,US,fitness,98000,5.3,830,USD,English,lina@example.test,demo,2026-09-27,Home fitness
+Daily Devon,TikTok,@dailydevon,US,lifestyle,45000,4.9,520,USD,English,devon@example.test,demo,2026-09-28,Daily routines

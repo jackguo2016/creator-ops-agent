@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "lumasip-product-facts",
+    "title": "LumaSip Product Facts",
+    "doc_type": "product_facts",
+    "body": "LumaSip is a smart hydration bottle with hydration reminders, a 14-day battery, and IPX7 water resistance. These are product facts, not medical claims. Do not state that the bottle cures, treats, or prevents dehydration or disease.",
+    "source_label": "LumaSip 产品事实",
+    "updated_at": "2026-09-15"
+  },
+  {
+    "slug": "us-creator-disclosure",
+    "title": "US Creator Disclosure Rules",
+    "doc_type": "compliance",
+    "body": "Sponsored US creator content must make the relationship clear with a visible #ad disclosure. The disclosure belongs in the content or caption and must not be hidden after more links. Marketing copy must avoid unsupported medical claims.",
+    "source_label": "美国创作者披露规范",
+    "updated_at": "2026-09-10"
+  },
+  {
+    "slug": "outreach-tone",
+    "title": "Creator Outreach Tone",
+    "doc_type": "communication",
+    "body": "Outreach should be concise, specific, and respectful. Name the brand, explain why the creator fits, list the requested deliverable, ask for availability and a quote, and avoid promising acceptance before review.",
+    "source_label": "创作者邀约写作规范",
+    "updated_at": "2026-09-12"
+  },
+  {
+    "slug": "delivery-checklist",
+    "title": "LumaSip Delivery Checklist",
+    "doc_type": "delivery",
+    "body": "The product should appear in the first five seconds. The creator must mention LumaSip, include #ad, keep the profile link live for seven days, and publish by the campaign deadline. Confirm the final URL and publish time.",
+    "source_label": "LumaSip 内容交付清单",
+    "updated_at": "2026-09-20"
+  },
+  {
+    "slug": "prohibited-claims",
+    "title": "Prohibited Health Claims",
+    "doc_type": "compliance",
+    "body": "Do not claim that LumaSip cures dehydration, treats illness, prevents disease, guarantees athletic performance, or provides a medical diagnosis. Ask for revision when content contains these medical or treatment claims.",
+    "source_label": "健康宣称限制",
+    "updated_at": "2026-09-18"
+  },
+  {
+    "slug": "campaign-reporting",
+    "title": "Campaign Reporting Fields",
+    "doc_type": "reporting",
+    "body": "Record creator handle, platform, agreed fee, deliverable URL, publish time, views, engagement, approval state, source date, and any exception. Keep changes traceable to the project and creator.",
+    "source_label": "项目复盘字段规范",
+    "updated_at": "2026-09-16"
+  }
+]
